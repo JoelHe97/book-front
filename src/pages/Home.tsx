@@ -9,16 +9,26 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Book } from "../models/Books";
 import { Button } from "@mui/material";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
 const Home = () => {
     const [AllBooks, setAllBooks] = useState<Book[]>([])
+    const [page, setPage] = useState(1)
+    const [count, setCount] = useState(1)
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
+
     useEffect(() => {
-        books.getAll({ page: 1 }).then(r => {
-            console.log(r.data)
+        books.getAll({ page }).then(r => {
+            setCount(r.data.pages)
             setAllBooks(r.data.results)
         }).catch(console.error)
 
 
-    }, [])
+    }, [page])
 
     return (
         <>
@@ -64,6 +74,10 @@ const Home = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Stack spacing={2}>
+                <Typography>Page: {page}</Typography>
+                <Pagination count={count} page={page} onChange={handleChange} />
+            </Stack>
         </>
     )
 }
