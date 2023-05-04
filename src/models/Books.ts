@@ -1,6 +1,6 @@
 export interface Book {
-    id: string
-    ratings: Rating[]
+    id?: string
+    ratings?: Rating[]
     title: string
     author: string
     year_publication: string
