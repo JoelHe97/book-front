@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { books } from "../api/books.api"
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,11 +12,15 @@ import { Button } from "@mui/material";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Modal } from "../components/Modal";
+import ModalContext from "../context/modalContext";
+
 
 const Home = () => {
     const [AllBooks, setAllBooks] = useState<Book[]>([])
     const [page, setPage] = useState(1)
     const [count, setCount] = useState(1)
+    const { setOpenModal } = useContext(ModalContext)
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
@@ -29,6 +33,11 @@ const Home = () => {
 
 
     }, [page])
+    const [selectedBook, setSelectedBook] = useState<string | undefined>("");
+    const handleEditBook = (id: string | undefined) => {
+        setSelectedBook(id);
+        setOpenModal(true)
+    };
 
     return (
         <>
@@ -46,26 +55,25 @@ const Home = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {AllBooks ? AllBooks.map(row => {
+                        {AllBooks ? AllBooks.map(book => {
                             return (<TableRow
-                                key={row.id}
+                                key={book.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row">
-                                    {row.title}
+                                    {book.title}
                                 </TableCell>
-                                <TableCell align="right">{row.author}</TableCell>
-                                <TableCell align="right">{row.publisher}</TableCell>
-                                <TableCell align="right">{row.year_publication}</TableCell>
+                                <TableCell align="right">{book.author}</TableCell>
+                                <TableCell align="right">{book.publisher}</TableCell>
+                                <TableCell align="right">{book.year_publication}</TableCell>
                                 <TableCell align="right">
 
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Button>Editar</Button>
+                                    <Button onClick={() => handleEditBook(book.id)}>Editar</Button>
                                     <Button>Eliminar</Button>
                                 </TableCell>
                             </TableRow>
-
                             )
 
 
@@ -74,6 +82,8 @@ const Home = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Modal id={selectedBook}></Modal>
+
             <Stack spacing={2}>
                 <Typography>Page: {page}</Typography>
                 <Pagination count={count} page={page} onChange={handleChange} />
