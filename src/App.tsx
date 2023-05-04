@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route, Outlet, Link, useNavigate } from 'react-router-dom'
+import { Route, Routes, BrowserRouter as Router, Link } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
+import { ModalProvider } from './context/modalContext'
 const NotImplemented = () => {
   return <>
     <Link to="/books">Ir a libros</Link>
@@ -10,13 +11,19 @@ const NotImplemented = () => {
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='*' element={<NotImplemented />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Home />}></Route>
+      <Route path='*' element={<NotImplemented />}></Route>
+    </Routes>
   )
 }
 
-export default App
+export function WrappedApp() {
+  return (
+    <Router>
+      <ModalProvider>
+        <App />
+      </ModalProvider>
+    </Router>
+  )
+}
