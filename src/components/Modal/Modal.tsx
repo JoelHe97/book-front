@@ -5,9 +5,7 @@ import ModalContext from '../../context/modalContext';
 import Box from '@mui/material/Box';
 import { Form } from '..';
 
-export type ModalProps = {
-	id: string | undefined
-}
+export type ModalProps = object
 const style = {
 	position: 'absolute',
 	top: '50%',
@@ -19,7 +17,7 @@ const style = {
 	boxShadow: 24,
 	p: 4,
 };
-const Modal: React.FC<ModalProps> = ({ id }) => {
+const Modal: React.FC<ModalProps> = () => {
 	const { openModal, setOpenModal } = useContext(ModalContext)
 	const handleClose = () => setOpenModal(false);
 	return (
@@ -31,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ id }) => {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					<Form id={id}></Form>
+					<Form></Form>
 				</Box>
 			</MuiModal>
 		</div>

@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from 'react';
-import { books } from "../../api/books.api";
+import { useContext, useEffect } from 'react';
+import CrudContext from "../../context/crudContext";
 
 
 type Inputs = {
@@ -14,35 +14,31 @@ type Inputs = {
 	image_3: string,
 };
 
-export type ModalProps = {
-	id: string | undefined
-}
-const Form: React.FC<ModalProps> = ({ id }) => {
+export type ModalProps = object
+const Form: React.FC<ModalProps> = () => {
+	const { updatedData, selectedBook } = useContext(CrudContext)
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		if (id) {
-			books.updateBook(data)
+		if (selectedBook) {
+			updatedData(data)
 		}
 	}
 
 
 	const { register, handleSubmit, reset, formState: { errors } } = useForm<Inputs>();
 	useEffect(() => {
-		if (id) {
-			books.getBook(id).then(r => {
-				reset(r.data)
-			}).catch(console.error)
-
+		if (selectedBook) {
+			reset(selectedBook)
 		}
-	}, [reset, id])
+	}, [reset, selectedBook])
 
 	return (
-		/* "handleSubmit" will validate your inputs before invoking "onSubmit" */
+
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div style={{ display: "grid", gridGap: "1em" }}>
 				<TextField  {...register("title", { required: true })}
 					id="outlined-password-input"
 					label="Title"
-					defaultValue={id ? "..." : ""}
+					defaultValue={selectedBook ? "..." : ""}
 					type="text"
 
 				/>
@@ -52,7 +48,8 @@ const Form: React.FC<ModalProps> = ({ id }) => {
 				<TextField  {...register("author", { required: true })}
 					id="outlined-password-input"
 					label="Author"
-					defaultValue={id ? "..." : ""}
+					disabled={selectedBook ? true : false}
+					defaultValue={selectedBook ? "..." : ""}
 					type="text"
 
 				/>
@@ -61,7 +58,8 @@ const Form: React.FC<ModalProps> = ({ id }) => {
 				<TextField  {...register("publisher", { required: true })}
 					id="outlined-password-input"
 					label="Publisher"
-					defaultValue={id ? "..." : ""}
+					defaultValue={selectedBook ? "..." : ""}
+					disabled={selectedBook ? true : false}
 					type="text"
 
 				/>
@@ -70,7 +68,8 @@ const Form: React.FC<ModalProps> = ({ id }) => {
 				<TextField  {...register("year_publication", { required: true })}
 					id="outlined-password-input"
 					label="Year publication"
-					defaultValue={id ? "..." : ""}
+					defaultValue={selectedBook ? "..." : ""}
+					disabled={selectedBook ? true : false}
 					type="text"
 
 				/>
@@ -79,7 +78,8 @@ const Form: React.FC<ModalProps> = ({ id }) => {
 				<TextField  {...register("image_1", { required: true })}
 					id="outlined-password-input"
 					label="Image 1"
-					defaultValue={id ? "..." : ""}
+					defaultValue={selectedBook ? "..." : ""}
+					disabled={selectedBook ? true : false}
 					type="text"
 
 				/>
@@ -87,7 +87,8 @@ const Form: React.FC<ModalProps> = ({ id }) => {
 				<TextField  {...register("image_2", { required: true })}
 					id="outlined-password-input"
 					label="Image 2"
-					defaultValue={id ? "..." : ""}
+					defaultValue={selectedBook ? "..." : ""}
+					disabled={selectedBook ? true : false}
 					type="text"
 
 				/>
@@ -95,13 +96,14 @@ const Form: React.FC<ModalProps> = ({ id }) => {
 				<TextField  {...register("image_3", { required: true })}
 					id="outlined-password-input"
 					label="Image 3"
-					defaultValue={id ? "..." : ""}
+					defaultValue={selectedBook ? "..." : ""}
+					disabled={selectedBook ? true : false}
 					type="text"
 
 				/>
 				{errors.image_3 && <span>This field is required</span>}
 
-				<Button variant="outlined" type="submit">{id ? "Update" : "Create"}</Button>
+				<Button variant="outlined" type="submit">{selectedBook ? "Update" : "Create"}</Button>
 			</div>
 		</form>
 	);

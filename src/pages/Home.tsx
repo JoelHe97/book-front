@@ -18,26 +18,15 @@ import CrudContext from "../context/crudContext";
 
 
 const Home = () => {
-    // const [AllBooks, setAllBooks] = useState<Book[]>([])
-    // const [page, setPage] = useState(1)
-    // const [count, setCount] = useState(1)
-    const { setPage, page, AllBooks, count, error } = useContext(CrudContext)
+
+    const { setPage, page, AllBooks, count, error, setSelectedBook } = useContext(CrudContext)
     const { setOpenModal } = useContext(ModalContext)
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
 
-    // useEffect(() => {
-    //     books.getAll({ page }).then(r => {
-    //         setCount(r.data.pages)
-    //         setAllBooks(r.data.results)
-    //     }).catch(console.error)
-
-
-    // }, [page])
-    const [selectedBook, setSelectedBook] = useState<string | undefined>("");
     const handleEditBook = (book: Book) => {
-        setSelectedBook(book.id);
+        setSelectedBook(book);
         setOpenModal(true)
     };
 
@@ -85,7 +74,7 @@ const Home = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Modal id={selectedBook}></Modal>
+                <Modal></Modal>
 
                 <Stack spacing={2}>
                     <Typography>Page: {page}</Typography>
