@@ -2,6 +2,7 @@ import { Route, Routes, BrowserRouter as Router, Link } from 'react-router-dom'
 import './App.css'
 import Home from './pages/Home'
 import { ModalProvider } from './context/modalContext'
+import { CrudProvider } from './context/crudContext'
 const NotImplemented = () => {
   return <>
     <Link to="/books">Ir a libros</Link>
@@ -22,7 +23,9 @@ export function WrappedApp() {
   return (
     <Router>
       <ModalProvider>
-        <App />
+        <CrudProvider>
+          <App />
+        </CrudProvider>
       </ModalProvider>
     </Router>
   )
