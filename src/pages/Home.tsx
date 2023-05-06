@@ -29,10 +29,15 @@ const Home = () => {
         setSelectedBook(book);
         setOpenModal(true)
     };
+    const handleCreateBook = () => {
+        setSelectedBook(null);
+        setOpenModal(true)
+    };
 
     return (
         <>
             <div>Home</div>
+            <Button variant="contained" onClick={handleCreateBook}>Create</Button>
             {error ? error : (<>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -16,5 +16,8 @@ export const books = {
     updateBook: function (data: Book) {
         return instance.put(`${endpoint}${data.id}/`, data)
     },
+    createBook: function (data: Book): Promise<Book> {
+        return instance.post(`${endpoint}`, data)
+    },
 
 }

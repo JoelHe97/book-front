@@ -22,9 +22,10 @@ interface ICrudContext {
     count: number,
     setCount: React.Dispatch<React.SetStateAction<number>>,
     error: string,
-    setSelectedBook: React.Dispatch<React.SetStateAction<Book>>,
-    selectedBook: Book,
+    setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>,
+    selectedBook: Book | null,
     updatedData: (data: Book) => void,
+    createData: (data: Book) => void,
 }
 const defaultState: ICrudContext = {
     AllBooks: [],
@@ -35,7 +36,8 @@ const defaultState: ICrudContext = {
     error: "",
     setSelectedBook: () => console.log("Modal Context"),
     selectedBook: defaultData,
-    updatedData: () => console.log("Modal Context")
+    updatedData: () => console.log("Modal Context"),
+    createData: () => console.log("Modal Context")
 }
 
 const CrudContext = createContext<ICrudContext>(defaultState);
@@ -43,7 +45,7 @@ const CrudProvider = ({ children }: Props) => {
     const [AllBooks, setAllBooks] = useState<Book[]>([])
     const [error, setError] = useState<string>("");
     const [count, setCount] = useState(1)
-    const [selectedBook, setSelectedBook] = useState<Book>(defaultData);
+    const [selectedBook, setSelectedBook] = useState<Book | null>(defaultData);
     const [page, setPage] = useState(1)
     const { setOpenModal } = useContext(ModalContext)
     useEffect(() => {
@@ -64,6 +66,15 @@ const CrudProvider = ({ children }: Props) => {
         })
 
     };
+    const createData = (data: Book) => {
+        books.createBook(data).then((res) => {
+            setAllBooks([...AllBooks, res]);
+            setOpenModal(false)
+        }).catch(e => {
+            setError(e.message)
+        })
+
+    };
     const data = {
         AllBooks,
         page,
@@ -74,7 +85,7 @@ const CrudProvider = ({ children }: Props) => {
         updatedData,
         selectedBook,
         setSelectedBook,
-
+        createData
     };
     return (<CrudContext.Provider value={data}>{children}</CrudContext.Provider>);
 };
