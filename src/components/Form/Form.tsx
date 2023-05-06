@@ -5,6 +5,7 @@ import CrudContext from "../../context/crudContext";
 
 
 type Inputs = {
+	id: string,
 	title: string,
 	author: string,
 	publisher: string,
@@ -16,10 +17,12 @@ type Inputs = {
 
 export type ModalProps = object
 const Form: React.FC<ModalProps> = () => {
-	const { updatedData, selectedBook } = useContext(CrudContext)
+	const { updatedData, selectedBook, createData } = useContext(CrudContext)
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		if (selectedBook) {
 			updatedData(data)
+		} else {
+			createData(data)
 		}
 	}
 
@@ -35,6 +38,14 @@ const Form: React.FC<ModalProps> = () => {
 
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div style={{ display: "grid", gridGap: "1em" }}>
+				<TextField  {...register("id", { required: true })}
+					id="outlined-password-input"
+					label="ID"
+					disabled={selectedBook ? true : false}
+					defaultValue={selectedBook ? "..." : ""}
+					type="text"
+
+				/>
 				<TextField  {...register("title", { required: true })}
 					id="outlined-password-input"
 					label="Title"
